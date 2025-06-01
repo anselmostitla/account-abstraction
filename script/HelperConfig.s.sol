@@ -16,6 +16,7 @@ contract HelperConfig is Script {
    uint256 constant ZKSYNC_SEPOLIA_CHAIN_ID = 333;
    uint256 constant LOCAL_CHAIN_ID = 31337;
    address constant BURNER_WALLET = 0x4560f03A937eE6Fdb80b339A76d16ea4351F97A1;
+   address constant DEFAULT_SENDER_WALLET = 0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38; // I think this comes from Base.sol
 
    NetworkConfig public localNetworkConfig;
    mapping(uint256 chainId => NetworkConfig) networkConfigs;
@@ -53,7 +54,10 @@ contract HelperConfig is Script {
       }
 
       // Therwise create a mock
-      return localNetworkConfig;
+      return NetworkConfig({
+         entryPoint: address(0),
+         account: DEFAULT_SENDER_WALLET
+      });
    }
 }
 

@@ -2,12 +2,12 @@
 pragma solidity 0.8.24;
 
 import {IAccount} from "lib/account-abstraction/contracts/interfaces/IAccount.sol";
+import {IEntryPoint} from "lib/account-abstraction/contracts/interfaces/IEntryPoint.sol";
 import {PackedUserOperation} from "lib/account-abstraction/contracts/interfaces/PackedUserOperation.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
-import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import { SIG_VALIDATION_FAILED, SIG_VALIDATION_SUCCESS} from "lib/account-abstraction/contracts/core/Helpers.sol";
-import { IEntryPoint } from "lib/account-abstraction/contracts/interfaces/IEntryPoint.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 contract MinimalAccount is IAccount, Ownable{
 
@@ -54,7 +54,7 @@ contract MinimalAccount is IAccount, Ownable{
                            EXTERNAL FUNCTIONS
    *//////////////////////////////////////////////////////////
 
-   function execute(address dest, uint256 value, bytes calldata functionData) external{ // functionData is going to be the ABI encoded function
+   function execute(address dest, uint256 value, bytes calldata functionData) external requireFromEntryPointOrOwner{ // functionData is going to be the ABI encoded function
       (bool success, bytes memory result) = dest.call{value: value, gas: type(uint256).max}(functionData);
       if (!success){ revert MinimalAccount__CallFailed(result); }
    }
