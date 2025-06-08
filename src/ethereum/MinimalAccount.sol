@@ -85,6 +85,7 @@ contract MinimalAccount is IAccount, Ownable{
    }
 
    function _payPrefund(uint256 missingAccountFunds) internal {
+      require(address(this).balance >= missingAccountFunds, "Not enought funds...");
       if (missingAccountFunds != 0) {
          (bool success, ) = payable(msg.sender).call{value:missingAccountFunds, gas:type(uint256).max}("");
          if (!success) { revert MinimalAccount__FailedPreFund();}
