@@ -63,7 +63,7 @@ contract HelperConfig is Script {
 
       localNetworkConfig = NetworkConfig({ entryPoint: address(entryPoint), account: ANVIL_DEFAULT_ACCOUNT});
 
-      // Therwise create a mock
+      // Otherwise create a mock
       return localNetworkConfig;
    }
 }
